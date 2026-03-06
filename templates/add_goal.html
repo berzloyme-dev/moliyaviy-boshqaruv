@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4">
+            <h3 class="mb-4 text-center">Yangi maqsad qo'shish 🎯</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Maqsad nomi</label>
+                    <input type="text" name="name" class="form-control" placeholder="Masalan: iPhone 16 Pro" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Kerakli summa </label>
+                    <input type="number" name="target_amount" class="form-control" placeholder="0.00" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Boshlang'ich summa </label>
+                    <input type="number" name="current_amount" class="form-control" value="0">
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">Maqsadni yaratish</button>
+                    <a href="{% url 'savings_list' %}" class="btn btn-outline-secondary">Orqaga</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

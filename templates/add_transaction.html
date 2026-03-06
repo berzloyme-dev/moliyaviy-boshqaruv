@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block title %}Yangi amal{% endblock %}
+
+{% block content %}
+
+<style>
+    select option {
+        background-color: #1f2937;
+        color: white;
+        padding: 10px;
+    }
+</style>
+
+<div class="max-w-4xl mx-auto">
+
+    <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-3xl p-10">
+
+        <h2 class="text-4xl font-bold mb-10 text-white text-center">
+            Yangi amal qo'shish
+        </h2>
+
+        <form method="post" class="space-y-8" id="transactionForm">
+            {% csrf_token %}
+
+            <!-- SARLAVHA (Title) -->
+            <div>
+                <label class="block text-lg text-gray-300 mb-3 font-medium">
+                    Sarlavha
+                </label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <p class="text-red-400 text-sm mt-2">{{ form.title.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- TURI (Tugmalar) -->
+            <div>
+                <label class="block text-lg text-gray-300 mb-4 font-medium">
+                    Turi
+                </label>
+                <div class="flex gap-4">
+                    <button type="button" onclick="selectType('IN')" id="btn-in"
+                            class="flex-1 py-4 rounded-xl font-semibold transition text-lg
+                                   bg-white/10 hover:bg-green-500/30 border-2 border-white/20">
+                        💰 Kirim
+                    </button>
+                    <button type="button" onclick="selectType('OUT')" id="btn-out"
+                            class="flex-1 py-4 rounded-xl font-semibold transition text-lg
+                                   bg-white/10 hover:bg-red-500/30 border-2 border-white/20">
+                        💸 Chiqim
+                    </button>
+                </div>
+                <input type="hidden" name="type" id="type-input" required>
+                {% if form.type.errors %}
+                    <p class="text-red-400 text-sm mt-2">{{ form.type.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <!-- SUMMA -->
+            <div>
+                <label class="block text-lg text-gray-300 mb-3 font-medium">
+                    Summa
+                </label>
+                {{ form.amount }}
+                {% if form.amount.errors %}
+                    <p class="text-red-400 text-sm mt-2">{{ form.amount.errors.0 }}</p>
+                {% endif %}
+                
+                <!-- Tez kiritish tugmalari -->
+                <div class="mt-4 grid grid-cols-4 gap-3">
+                    <button type="button" onclick="addAmount(1000)" 
+                            class="py-2 px-4 bg-white/10 hover:bg-white/20 rounded-lg transition text-sm">
+                        +1,000
+                    </button>
+                    <button type="button" onclick="addAmount(5000)" 
+                            class="py-2 px-4 bg-white/10 hover:bg-white/20 rounded-lg transition text-sm">
+                        +5,000
+                    </button>
+                    <button type="button" onclick="addAmount(10000)" 
+                            class="py-2 px-4 bg-white/10 hover:bg-white/20 rounded-lg transition text-sm">
+                        +10,000
+                    </button>
+                    <button type="button" onclick="addAmount(50000)" 
+                            class="py-2 px-4 bg-white/10 hover:bg-white/20 rounded-lg transition text-sm">
+                        +50,000
+                    </button>
+                </div>
+            </div>
+
+            <!-- IZOH -->
+            <div>
+                <label class="block text-lg text-gray-300 mb-3 font-medium">
+                    Izoh (ixtiyoriy)
+                </label>
+                {{ form.note }}
+                {% if form.note.errors %}
+                    <p class="text-red-400 text-sm mt-2">{{ form.note.errors.0 }}</p>
+                {% endif %}
+            </div>
+
+            <button type="submit"
+                class="w-full py-4 text-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-xl font-semibold transition shadow-lg">
+                Saqlash
+            </button>
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+// Turi tanlash
+function selectType(type) {
+    document.getElementById('type-input').value = type;
+    
+    const btnIn = document.getElementById('btn-in');
+    const btnOut = document.getElementById('btn-out');
+    
+    if (type === 'IN') {
+        btnIn.className = 'flex-1 py-4 rounded-xl font-semibold transition text-lg bg-green-500 border-2 border-green-400';
+        btnOut.className = 'flex-1 py-4 rounded-xl font-semibold transition text-lg bg-white/10 hover:bg-red-500/30 border-2 border-white/20';
+    } else {
+        btnOut.className = 'flex-1 py-4 rounded-xl font-semibold transition text-lg bg-red-500 border-2 border-red-400';
+        btnIn.className = 'flex-1 py-4 rounded-xl font-semibold transition text-lg bg-white/10 hover:bg-green-500/30 border-2 border-white/20';
+    }
+}
+
+// Summa qo'shish
+function addAmount(value) {
+    const amountInput = document.querySelector('input[name="amount"]');
+    const currentValue = parseFloat(amountInput.value) || 0;
+    amountInput.value = currentValue + value;
+}
+</script>
+
+{% endblock %}

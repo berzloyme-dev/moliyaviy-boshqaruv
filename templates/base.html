@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Moliyaviy Boshqaruv{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body { 
+            font-family: ui-sans-serif, system-ui;
+            background: #000;
+        }
+        
+        /* Loading holatida oq ekranni oldini olish */
+        html {
+            background: #000;
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen text-white" style="background: #000;">
+
+    <!-- BACKGROUND -->
+    <div class="fixed inset-0 -z-10">
+        <img src="{% static 'images/mountain.jpg' %}"
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/60"></div>
+    </div>
+
+    <!-- MAIN GLASS WRAPPER -->
+    <div class="min-h-screen flex flex-col">
+
+        <!-- TOP NAVBAR -->
+        <nav class="bg-white/5 backdrop-blur-xl border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <div class="flex items-center justify-between">
+                    
+                    <!-- LOGO / BRAND -->
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center font-bold text-xl">
+                            M
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold">Moliyaviy Boshqaruv</h1>
+                            <p class="text-xs text-gray-400">{{ request.user.username }}</p>
+                        </div>
+                    </div>
+
+                    <!-- MENU -->
+                    <div class="flex items-center gap-2">
+                        <a href="{% url 'dashboard' %}"
+                           class="px-6 py-3 rounded-xl hover:bg-white/10 transition font-medium">
+                            🏠 Bosh sahifa
+                        </a>
+
+                        <a href="{% url 'add_transaction' %}"
+                           class="px-6 py-3 rounded-xl hover:bg-white/10 transition font-medium">
+                            ➕ Yangi amal
+                        </a>
+
+                        <a href="{% url 'all_transactions' %}"
+                           class="px-6 py-3 rounded-xl hover:bg-white/10 transition font-medium">
+                            📋 Amallar
+                        </a>
+
+                        <a href="{% url 'logout' %}"
+                           class="ml-4 px-6 py-3 rounded-xl bg-red-500/20 hover:bg-red-500/30 transition font-medium border border-red-500/30">
+                            Chiqish
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+        <!-- CONTENT -->
+        <main class="flex-1 max-w-7xl w-full mx-auto p-8">
+            {% block content %}{% endblock %}
+        </main>
+
+    </div>
+
+</body>
+</html>

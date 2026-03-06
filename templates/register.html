@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ro'yxatdan o'tish</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html, body {
+            background: #000;
+        }
+    </style>
+</head>
+
+<body class="relative min-h-screen text-white" style="background: #000;">
+
+    <!-- BACKGROUND -->
+    <div class="fixed inset-0 -z-10">
+        <img src="{% static 'images/mountain.jpg' %}"
+             class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-black/60"></div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="min-h-screen flex items-center justify-center p-6">
+
+        <div class="w-full max-w-lg
+                    bg-white/10
+                    backdrop-blur-xl
+                    border border-white/20
+                    rounded-3xl
+                    shadow-2xl
+                    p-10">
+
+            <!-- LOGO -->
+            <div class="flex justify-center mb-8">
+                <div class="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center font-bold text-3xl">
+                    M
+                </div>
+            </div>
+
+            <h2 class="text-4xl font-bold text-center mb-3">
+                Hisob yaratish
+            </h2>
+            <p class="text-center text-gray-400 mb-10 text-lg">
+                Moliyaviy boshqaruv tizimiga qo'shiling
+            </p>
+
+            <form method="post" class="space-y-6">
+                {% csrf_token %}
+
+                <div>
+                    <label class="block text-base text-gray-300 mb-3 font-medium">
+                        Foydalanuvchi nomi
+                    </label>
+                    
+                    <input type="text"
+                           name="username"
+                           class="w-full px-5 py-4 text-lg bg-white/10 border border-white/20 rounded-xl 
+                                  text-white placeholder-gray-400
+                                  focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 
+                                  outline-none transition backdrop-blur"
+                           required
+                           placeholder="Username">
+
+                    {% if form.username.errors %}
+                        <p class="text-red-400 text-sm mt-2">
+                            {{ form.username.errors.0 }}
+                        </p>
+                    {% endif %}
+                    
+                    {% if form.username.help_text %}
+                        <p class="text-gray-400 text-xs mt-2">
+                            150 ta yoki undan kam belgi. Faqat harflar, raqamlar va @/./+/-/_ belgilari.
+                        </p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label class="block text-base text-gray-300 mb-3 font-medium">
+                        Parol
+                    </label>
+                    
+                    <input type="password"
+                           name="password1"
+                           class="w-full px-5 py-4 text-lg bg-white/10 border border-white/20 rounded-xl 
+                                  text-white placeholder-gray-400
+                                  focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 
+                                  outline-none transition backdrop-blur"
+                           required
+                           placeholder="••••••••">
+
+                    {% if form.password1.errors %}
+                        <p class="text-red-400 text-sm mt-2">
+                            {{ form.password1.errors.0 }}
+                        </p>
+                    {% endif %}
+                    
+                    <p class="text-gray-400 text-xs mt-2">
+                        • Kamida 8 ta belgi<br>
+                        • Faqat raqamlardan iborat bo'lmasligi kerak<br>
+                        • Juda oddiy parol bo'lmasligi kerak
+                    </p>
+                </div>
+
+                <div>
+                    <label class="block text-base text-gray-300 mb-3 font-medium">
+                        Parolni tasdiqlash
+                    </label>
+                    
+                    <input type="password"
+                           name="password2"
+                           class="w-full px-5 py-4 text-lg bg-white/10 border border-white/20 rounded-xl 
+                                  text-white placeholder-gray-400
+                                  focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 
+                                  outline-none transition backdrop-blur"
+                           required
+                           placeholder="••••••••">
+
+                    {% if form.password2.errors %}
+                        <p class="text-red-400 text-sm mt-2">
+                            {{ form.password2.errors.0 }}
+                        </p>
+                    {% endif %}
+                </div>
+
+                <button type="submit"
+                    class="w-full py-4 text-lg bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 rounded-xl font-semibold transition shadow-lg">
+                    Hisob yaratish
+                </button>
+            </form>
+
+            <div class="mt-8 text-center">
+                <p class="text-gray-400 text-base">
+                    Hisobingiz bormi? 
+                    <a href="{% url 'login' %}" class="text-blue-400 hover:text-blue-300 font-semibold transition">
+                        Kirish
+                    </a>
+                </p>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

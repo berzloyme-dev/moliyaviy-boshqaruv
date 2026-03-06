@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Kunlik hisobot{% endblock %}
+
+{% block content %}
+
+<div class="flex gap-6">
+
+    <!-- SIDEBAR - Kunlar ro'yxati -->
+    <div class="w-80 bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 h-[calc(100vh-200px)] overflow-y-auto">
+        <h2 class="text-2xl font-bold text-white mb-6">Kunlar</h2>
+        
+        <div class="space-y-2">
+            {% for item in dates_list %}
+                <a href="?date={{ item.date|date:'Y-m-d' }}"
+                   class="block p-4 rounded-xl transition
+                          {% if selected_date == item.date %}
+                              bg-blue-500 text-white
+                          {% elif item.has_data %}
+                              bg-white/10 hover:bg-white/20 text-white
+                          {% else %}
+                              bg-white/5 text-gray-500 hover:bg-white/10
+                          {% endif %}">
+                    
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="font-semibold">{{ item.date|date:"d M" }}</p>
+                            <p class="text-xs opacity-75">{{ item.date|date:"l" }}</p>
+                        </div>
+                        
+                        {% if item.has_data %}
+                            <span class="text-green-400">●</span>
+                        {% endif %}
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT - Tanlangan kunning ma'lumotlari -->
+    <div class="flex-1">
+        
+        {% if selected_date %}
+            
+            <h1 class="text-4xl font-bold mb-6 text-white">
+                {{ selected_date|date:"d-M, Y" }} - {{ selected_date|date:"l" }}
+            </h1>
+
+            <!-- Statistika -->
+            <div class="grid grid-cols-3 gap-6 mb-8">
+                
+                <div class="bg-green-500/20 backdrop-blur-lg border border-green-500/30 rounded-2xl p-6">
+                    <p class="text-sm text-gray-300 mb-2">Kirim</p>
+                    <h2 class="text-3xl font-bold text-green-400">
+                        +{{ day_income|intcomma }}
+                    </h2>
+                </div>
+
+                <div class="bg-red-500/20 backdrop-blur-lg border border-red-500/30 rounded-2xl p-6">
+                    <p class="text-sm text-gray-300 mb-2">Chiqim</p>
+                    <h2 class="text-3xl font-bold text-red-400">
+                        -{{ day_expense|intcomma }}
+                    </h2>
+                </div>
+
+                <div class="bg-blue-500/20 backdrop-blur-lg border border-blue-500/30 rounded-2xl p-6">
+                    <p class="text-sm text-gray-300 mb-2">Balans</p>
+                    <h2 class="text-3xl font-bold {% if day_balance >= 0 %}text-blue-400{% else %}text-orange-400{% endif %}">
+                        {{ day_balance|intcomma }}
+                    </h2>
+                </div>
+
+            </div>
+
+            <!-- Amallar ro'yxati -->
+            {% if transactions %}
+                <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl overflow-hidden">
+                    
+                    <div class="p-6 border-b border-white/10">
+                        <h3 class="text-2xl font-bold text-white">Amallar</h3>
+                    </div>
+
+                    <div class="divide-y divide-white/10">
+                        {% for t in transactions %}
+                            <div class="p-6 hover:bg-white/5 transition">
+                                <div class="flex items-center justify-between">
+                                    
+                                    <div class="flex-1">
+                                        <p class="text-lg font-semibold text-white">{{ t.category }}</p>
+                                        <p class="text-sm text-gray-400 mt-1">{{ t.note|default:"—" }}</p>
+                                    </div>
+
+                                    <div class="flex items-center gap-4">
+                                        {% if t.type == "IN" %}
+                                            <span class="px-4 py-2 bg-green-500/20 text-green-300 border border-green-500/30 rounded-full text-sm font-medium">
+                                                Kirim
+                                            </span>
+                                            <p class="text-2xl font-bold text-green-400">
+                                                +{{ t.amount|intcomma }}
+                                            </p>
+                                        {% else %}
+                                            <span class="px-4 py-2 bg-red-500/20 text-red-300 border border-red-500/30 rounded-full text-sm font-medium">
+                                                Chiqim
+                                            </span>
+                                            <p class="text-2xl font-bold text-red-400">
+                                                -{{ t.amount|intcomma }}
+                                            </p>
+                                        {% endif %}
+                                    </div>
+
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                </div>
+            {% else %}
+                <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-12 text-center">
+                    <p class="text-gray-400 text-xl">
+                        Bu kunda amallar yo'q
+                    </p>
+                </div>
+            {% endif %}
+
+        {% else %}
+            
+            <!-- Sana tanlanmagan -->
+            <div class="flex items-center justify-center h-full">
+                <div class="text-center">
+                    <div class="text-6xl mb-6">📅</div>
+                    <h2 class="text-3xl font-bold text-white mb-4">Kunni tanlang</h2>
+                    <p class="text-gray-400 text-lg">
+                        Chap tarafdan kunni tanlang va o'sha kunning kirim-chiqimlarini ko'ring
+                    </p>
+                </div>
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}
