@@ -6,44 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chiqish</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        html, body {
-            background: #000;
-        }
-    </style>
 </head>
 
-<body class="relative min-h-screen text-white" style="background: #000;">
+<body class="relative min-h-screen text-white">
 
     <!-- BACKGROUND -->
     <div class="fixed inset-0 -z-10">
-        <img src="{% static 'images/mountain.jpg' %}"
+        <img src="{% static 'images/rasm2.jpg' %}"
              class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-black/60"></div>
+        <div class="absolute inset-0 bg-gradient-to-br from-slate-900/90 via-amber-900/80 to-slate-800/90"></div>
     </div>
 
     <!-- MAIN CONTENT -->
     <div class="min-h-screen flex items-center justify-center p-6">
 
         <div class="w-full max-w-lg
-                    bg-white/10
+                    bg-slate-800/80
                     backdrop-blur-xl
-                    border border-white/20
+                    border-2 border-amber-500/30
                     rounded-3xl
                     shadow-2xl
                     p-10">
 
             <!-- ICON -->
             <div class="flex justify-center mb-8">
-                <div class="w-20 h-20 bg-red-500/20 border-2 border-red-500/50 rounded-2xl flex items-center justify-center text-4xl">
+                <div class="w-24 h-24 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center text-5xl shadow-lg shadow-red-500/30">
                     👋
                 </div>
             </div>
 
-            <h2 class="text-4xl font-bold text-center mb-3">
+            <h2 class="text-4xl font-bold text-center mb-3 text-amber-400">
                 Tizimdan chiqmoqchimisiz?
             </h2>
-            <p class="text-center text-gray-400 mb-10 text-lg">
+            <p class="text-center text-gray-300 mb-10 text-lg">
                 Haqiqatan ham tizimdan chiqishni xohlaysizmi?
             </p>
 
@@ -51,13 +46,13 @@
                 {% csrf_token %}
 
                 <button type="submit"
-                    class="w-full py-4 text-lg bg-red-500 hover:bg-red-600 rounded-xl font-semibold transition shadow-lg">
-                    Ha, chiqish
+                    class="w-full py-4 text-lg bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold transition shadow-lg border-2 border-red-500 transform hover:-translate-y-0.5">
+                    ✓ Ha, chiqish
                 </button>
 
                 <a href="{% url 'dashboard' %}"
-                   class="block w-full py-4 text-lg text-center bg-white/10 hover:bg-white/20 rounded-xl font-semibold transition border border-white/20">
-                    Yo'q, qaytish
+                   class="block w-full py-4 text-lg text-center bg-slate-700/50 hover:bg-slate-700 text-white rounded-xl font-semibold transition border-2 border-amber-500/30 hover:border-amber-500/50 shadow-lg">
+                    ← Yo'q, qaytish
                 </a>
             </form>
 

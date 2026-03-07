@@ -1,0 +1,297 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Jamg'arma Kalkulyatori{% endblock %}
+
+{% block content %}
+
+<div class="max-w-6xl mx-auto space-y-6">
+
+    <h1 class="text-4xl font-bold text-amber-400 flex items-center gap-3 mb-8">
+        <span>🏦</span> Jamg'arma Kalkulyatori
+    </h1>
+
+    <!-- TARIFLAR -->
+    <div class="grid md:grid-cols-4 gap-4 mb-8">
+        <button onclick="selectTariff(7, 11, 100000)" id="tariff-7"
+                class="tariff-btn p-8 bg-slate-800/70 hover:bg-amber-600/30 border-2 border-slate-600 hover:border-amber-500 rounded-2xl transition text-center">
+            <div class="text-4xl mb-3">📅</div>
+            <div class="text-2xl font-bold text-white mb-2">7 oy</div>
+            <div class="text-3xl font-bold text-green-400 my-3">≈11%</div>
+            <div class="text-sm text-gray-400 mt-3">Min: 100,000 so'm</div>
+        </button>
+
+        <button onclick="selectTariff(13, 21, 100000)" id="tariff-13"
+                class="tariff-btn p-8 bg-slate-800/70 hover:bg-amber-600/30 border-2 border-slate-600 hover:border-amber-500 rounded-2xl transition text-center">
+            <div class="text-4xl mb-3">📆</div>
+            <div class="text-2xl font-bold text-white mb-2">13 oy</div>
+            <div class="text-3xl font-bold text-green-400 my-3">≈21%</div>
+            <div class="text-sm text-gray-400 mt-3">Min: 100,000 so'm</div>
+        </button>
+
+        <button onclick="selectTariff(27, 43, 10000000)" id="tariff-27"
+                class="tariff-btn p-8 bg-slate-800/70 hover:bg-amber-600/30 border-2 border-slate-600 hover:border-amber-500 rounded-2xl transition text-center">
+            <div class="text-4xl mb-3">📊</div>
+            <div class="text-2xl font-bold text-white mb-2">27 oy</div>
+            <div class="text-3xl font-bold text-green-400 my-3">≈43%</div>
+            <div class="text-sm text-gray-400 mt-3">Min: 10,000,000 so'm</div>
+        </button>
+
+        <button onclick="selectTariff(40, 64, 10000000)" id="tariff-40"
+                class="tariff-btn p-8 bg-slate-800/70 hover:bg-amber-600/30 border-2 border-slate-600 hover:border-amber-500 rounded-2xl transition text-center">
+            <div class="text-4xl mb-3">💎</div>
+            <div class="text-2xl font-bold text-white mb-2">40 oy</div>
+            <div class="text-3xl font-bold text-green-400 my-3">≈64%</div>
+            <div class="text-sm text-gray-400 mt-3">Min: 10,000,000 so'm</div>
+        </button>
+    </div>
+
+    <!-- SUMMA VA KUNLIK JAMG'ARMA (Yonma-yon) -->
+    <div class="grid lg:grid-cols-2 gap-6 mb-8">
+        
+        <!-- BOSHLANG'ICH SUMMA -->
+        <div class="bg-slate-800/70 backdrop-blur-lg border-2 border-amber-500/20 rounded-2xl p-8 shadow-xl">
+            <h2 class="text-2xl font-bold text-amber-400 mb-6 text-center">💰 Boshlang'ich summa</h2>
+            
+            <input type="number" id="initial-amount" value="100000" min="100000" step="100000"
+                   class="w-full px-6 py-4 bg-slate-700/50 border-2 border-slate-600 rounded-xl text-white text-3xl font-bold text-center focus:border-amber-500 focus:ring-2 focus:ring-amber-500/50 outline-none transition"
+                   oninput="calculateCombined()"
+                   placeholder="Summani kiriting">
+            <p class="text-center text-gray-400 mt-3" id="min-amount-hint">Minimal: 100,000 so'm</p>
+            
+            <!-- TEZ SUMMA TUGMALARI -->
+            <div class="grid grid-cols-4 gap-3 mt-4">
+                <button onclick="setAmount(100000)" 
+                        class="py-3 bg-slate-700/50 hover:bg-amber-600/30 border-2 border-slate-600 hover:border-amber-500 rounded-lg transition font-semibold text-white">
+                    100K
+                </button>
+                <button onclick="setAmount(500000)" 
+                        class="py-3 bg-slate-700/50 hover:bg-amber-600/30 border-2 border-slate-600 hover:border-amber-500 rounded-lg transition font-semibold text-white">
+                    500K
+                </button>
+                <button onclick="setAmount(1000000)" 
+                        class="py-3 bg-slate-700/50 hover:bg-amber-600/30 border-2 border-slate-600 hover:border-amber-500 rounded-lg transition font-semibold text-white">
+                    1M
+                </button>
+                <button onclick="setAmount(5000000)" 
+                        class="py-3 bg-slate-700/50 hover:bg-amber-600/30 border-2 border-slate-600 hover:border-amber-500 rounded-lg transition font-semibold text-white">
+                    5M
+                </button>
+            </div>
+        </div>
+
+        <!-- KUNLIK JAMG'ARMA -->
+        <div class="bg-gradient-to-br from-green-600/10 to-emerald-600/10 backdrop-blur-lg border-2 border-green-500/30 rounded-2xl p-8 shadow-xl">
+            <h2 class="text-2xl font-bold text-green-400 mb-6 text-center">📅 Kunlik jamg'arma</h2>
+            
+            <div class="flex items-center gap-4 mb-4">
+                <label class="text-white font-medium whitespace-nowrap">Kunlik:</label>
+                <input type="number" id="daily-amount" value="5000" min="0" step="1000"
+                       class="flex-1 px-4 py-3 bg-slate-700/50 border-2 border-slate-600 rounded-xl text-white text-2xl font-bold text-center focus:border-green-500 focus:ring-2 focus:ring-green-500/50 outline-none transition"
+                       oninput="calculateCombined()">
+                <span class="text-white font-medium">so'm</span>
+            </div>
+            
+            <!-- TEZ KUNLIK SUMMA TUGMALARI -->
+            <div class="grid grid-cols-5 gap-2 mb-6">
+                <button onclick="setDailyAmount(3000)" 
+                        class="py-2 bg-slate-700/50 hover:bg-green-600/30 border border-slate-600 hover:border-green-500 rounded-lg transition text-sm font-semibold text-white">
+                    3K
+                </button>
+                <button onclick="setDailyAmount(5000)" 
+                        class="py-2 bg-slate-700/50 hover:bg-green-600/30 border border-slate-600 hover:border-green-500 rounded-lg transition text-sm font-semibold text-white">
+                    5K
+                </button>
+                <button onclick="setDailyAmount(10000)" 
+                        class="py-2 bg-slate-700/50 hover:bg-green-600/30 border border-slate-600 hover:border-green-500 rounded-lg transition text-sm font-semibold text-white">
+                    10K
+                </button>
+                <button onclick="setDailyAmount(20000)" 
+                        class="py-2 bg-slate-700/50 hover:bg-green-600/30 border border-slate-600 hover:border-green-500 rounded-lg transition text-sm font-semibold text-white">
+                    20K
+                </button>
+                <button onclick="setDailyAmount(50000)" 
+                        class="py-2 bg-slate-700/50 hover:bg-green-600/30 border border-slate-600 hover:border-green-500 rounded-lg transition text-sm font-semibold text-white">
+                    50K
+                </button>
+            </div>
+            
+            <p class="text-center text-sm text-gray-300">
+                💡 Har kuni <span id="daily-display" class="text-green-400 font-bold">5,000</span> so'm jamg'arsangiz, 
+                <span id="months-display" class="text-amber-400 font-bold">7</span> oyda 
+                <span id="total-daily-display" class="text-green-400 font-bold">1,050,000</span> so'm qo'shasiz!
+            </p>
+        </div>
+        
+    </div>
+
+    <!-- NATIJALAR -->
+    <div class="grid md:grid-cols-4 gap-6 mt-8">
+        
+        <!-- Yakuniy summa -->
+        <div class="bg-gradient-to-br from-amber-600/20 to-yellow-600/20 backdrop-blur-lg border-2 border-amber-500/30 rounded-2xl p-6 shadow-xl">
+            <p class="text-sm text-amber-300 mb-2">💎 Yakuniy summa</p>
+            <h2 class="text-3xl font-bold text-white" id="final-amount">106,417</h2>
+            <p class="text-gray-400 text-xs mt-1">so'm</p>
+        </div>
+
+        <!-- Foyda -->
+        <div class="bg-green-500/10 border-2 border-green-500/40 rounded-2xl p-6 shadow-lg">
+            <p class="text-sm text-green-300 mb-2">📊 Jami foyda</p>
+            <h3 class="text-3xl font-bold text-green-400" id="total-profit">+6,417</h3>
+            <p class="text-gray-400 text-xs mt-1">so'm</p>
+        </div>
+
+        <!-- Foiz ko'rsatkichi -->
+        <div class="bg-slate-800/70 backdrop-blur-lg border-2 border-amber-500/20 rounded-2xl p-6 shadow-xl">
+            <p class="text-sm text-amber-300 mb-2">📈 O'sish</p>
+            <h3 class="text-3xl font-bold text-amber-400" id="growth-percent">+6.4%</h3>
+        </div>
+
+        <!-- Oylik foyda -->
+        <div class="bg-blue-500/10 border-2 border-blue-500/40 rounded-2xl p-6 shadow-lg">
+            <p class="text-sm text-blue-300 mb-2">💵 Oylik foyda</p>
+            <h3 class="text-3xl font-bold text-blue-400" id="monthly-profit">917</h3>
+            <p class="text-gray-400 text-xs mt-1">so'm/oy</p>
+        </div>
+
+    </div>
+
+    <!-- OY BO'YICHA JADVAL -->
+    <div class="bg-slate-800/70 backdrop-blur-lg border-2 border-amber-500/20 rounded-2xl p-8 shadow-xl">
+        <h2 class="text-2xl font-bold text-amber-400 mb-6">📅 Oy bo'yicha o'sish</h2>
+        
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead>
+                    <tr class="border-b-2 border-amber-500/30">
+                        <th class="text-left py-3 px-4 text-amber-300 font-semibold">Oy</th>
+                        <th class="text-right py-3 px-4 text-amber-300 font-semibold">Boshlang'ich</th>
+                        <th class="text-right py-3 px-4 text-amber-300 font-semibold">Kunlik qo'shimcha</th>
+                        <th class="text-right py-3 px-4 text-amber-300 font-semibold">Oylik foiz</th>
+                        <th class="text-right py-3 px-4 text-amber-300 font-semibold">Yakuniy</th>
+                        <th class="text-right py-3 px-4 text-amber-300 font-semibold">Jami foyda</th>
+                    </tr>
+                </thead>
+                <tbody id="monthly-breakdown">
+                    <!-- JavaScript bilan to'ldiriladi -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+let currentMonths = 7;
+let currentRate = 11;
+let currentMinAmount = 100000;
+
+function formatNumber(num) {
+    return Math.round(num).toLocaleString('en-US');
+}
+
+function setAmount(amount) {
+    document.getElementById('initial-amount').value = amount;
+    calculateCombined();
+}
+
+function setDailyAmount(amount) {
+    document.getElementById('daily-amount').value = amount;
+    calculateCombined();
+}
+
+function calculateCombined() {
+    const A0 = parseFloat(document.getElementById('initial-amount').value) || 0;
+    const dailyAmount = parseFloat(document.getElementById('daily-amount').value) || 0;
+    
+    // Kunlik jamg'arma ma'lumotlarini yangilash
+    const totalDailySavings = dailyAmount * 30 * currentMonths;
+    document.getElementById('daily-display').textContent = formatNumber(dailyAmount);
+    document.getElementById('months-display').textContent = currentMonths;
+    document.getElementById('total-daily-display').textContent = formatNumber(totalDailySavings);
+    
+    if (A0 < currentMinAmount) {
+        document.getElementById('final-amount').textContent = '0';
+        document.getElementById('total-profit').textContent = '0';
+        document.getElementById('growth-percent').textContent = '0%';
+        document.getElementById('monthly-profit').textContent = '0';
+        document.getElementById('monthly-breakdown').innerHTML = '<tr><td colspan="5" class="text-center py-4 text-gray-400">Minimal summadan kam!</td></tr>';
+        return;
+    }
+    
+    // Oylik jadval to'ldirish (boshlang'ich + kunlik + foiz)
+    const tbody = document.getElementById('monthly-breakdown');
+    tbody.innerHTML = '';
+    
+    let currentAmount = A0;
+    const monthlyRate = Math.pow(1 + currentRate / 100, 1/12) - 1;
+    const monthlyDeposit = dailyAmount * 30; // Oylik qo'shimcha
+    
+    for (let month = 1; month <= currentMonths; month++) {
+        const monthStart = currentAmount;
+        
+        // Oylik qo'shimcha qo'shish
+        currentAmount += monthlyDeposit;
+        
+        // Foiz hisoblash
+        const monthlyInterest = currentAmount * monthlyRate;
+        currentAmount += monthlyInterest;
+        
+        const totalProfitSoFar = currentAmount - A0 - (monthlyDeposit * month);
+        
+        const row = document.createElement('tr');
+        row.className = 'border-b border-slate-700 hover:bg-slate-700/30 transition';
+        row.innerHTML = `
+            <td class="py-3 px-4 text-white font-semibold">${month}</td>
+            <td class="py-3 px-4 text-right text-gray-300">${formatNumber(monthStart)}</td>
+            <td class="py-3 px-4 text-right text-blue-400">+${formatNumber(monthlyDeposit)}</td>
+            <td class="py-3 px-4 text-right text-green-400">+${formatNumber(monthlyInterest)}</td>
+            <td class="py-3 px-4 text-right text-amber-400 font-bold">${formatNumber(currentAmount)}</td>
+            <td class="py-3 px-4 text-right text-purple-400">+${formatNumber(totalProfitSoFar)}</td>
+        `;
+        tbody.appendChild(row);
+    }
+    
+    // Yakuniy natijalar
+    const finalAmount = currentAmount;
+    const totalDeposited = A0 + (monthlyDeposit * currentMonths);
+    const totalProfit = finalAmount - totalDeposited;
+    const growthPercent = (totalProfit / totalDeposited) * 100;
+    const monthlyProfit = totalProfit / currentMonths;
+    
+    document.getElementById('final-amount').textContent = formatNumber(finalAmount);
+    document.getElementById('total-profit').textContent = '+' + formatNumber(totalProfit);
+    document.getElementById('growth-percent').textContent = '+' + growthPercent.toFixed(1) + '%';
+    document.getElementById('monthly-profit').textContent = formatNumber(monthlyProfit);
+}
+
+function selectTariff(months, interestRate, minAmount) {
+    currentMonths = months;
+    currentRate = interestRate;
+    currentMinAmount = minAmount;
+    
+    document.getElementById('initial-amount').min = minAmount;
+    document.getElementById('min-amount-hint').textContent = `Minimal: ${formatNumber(minAmount)} so'm`;
+    
+    const currentAmount = parseFloat(document.getElementById('initial-amount').value);
+    if (currentAmount < minAmount) {
+        document.getElementById('initial-amount').value = minAmount;
+    }
+    
+    document.querySelectorAll('.tariff-btn').forEach(btn => {
+        btn.classList.remove('bg-amber-600', 'border-amber-500');
+        btn.classList.add('bg-slate-800/70', 'border-slate-600');
+    });
+    
+    document.getElementById(`tariff-${months}`).classList.remove('bg-slate-800/70', 'border-slate-600');
+    document.getElementById(`tariff-${months}`).classList.add('bg-amber-600', 'border-amber-500');
+    
+    calculateCombined();
+}
+
+window.addEventListener('load', function() {
+    selectTariff(7, 11, 100000);
+});
+</script>
+
+{% endblock %}

@@ -28,7 +28,7 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=12, decimal_places=2, verbose_name="Summa")
     type = models.CharField(max_length=3, choices=TYPES, verbose_name="Turi")
     date = models.DateField(default=timezone.now, verbose_name="Sana")
-    time = models.TimeField(auto_now_add=True, null=True, verbose_name="Vaqt")
+    time = models.DateTimeField(auto_now_add=True, null=True, verbose_name="Vaqt")
     note = models.TextField(blank=True, verbose_name="Izoh")
 
 

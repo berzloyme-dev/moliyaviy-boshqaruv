@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% block title %}Statistika{% endblock %}
+
+{% block content %}
+
+<div class="space-y-6">
+
+    <h1 class="text-4xl font-bold text-amber-400 flex items-center gap-3 mb-8">
+        <span>📊</span> Statistika va Tahlil
+    </h1>
+
+    <!-- UMUMIY STATISTIKA -->
+    <div class="grid md:grid-cols-3 gap-6">
+        <div class="bg-gradient-to-br from-amber-600/20 to-yellow-600/20 backdrop-blur-lg border-2 border-amber-500/30 rounded-2xl p-8 shadow-lg">
+            <p class="text-base text-amber-300 mb-2">💰 Umumiy balans</p>
+            <h2 class="text-4xl font-bold text-white">{{ balance|floatformat:2|intcomma }}</h2>
+            <p class="text-gray-400 mt-1">so'm</p>
+        </div>
+
+        <div class="bg-green-500/10 border-2 border-green-500/40 rounded-2xl p-8 shadow-lg">
+            <p class="text-base text-green-300 mb-2">📈 Jami kirim</p>
+            <h2 class="text-4xl font-bold text-green-400">+{{ total_in|floatformat:2|intcomma }}</h2>
+            <p class="text-gray-400 mt-1">so'm</p>
+        </div>
+
+        <div class="bg-red-500/10 border-2 border-red-500/40 rounded-2xl p-8 shadow-lg">
+            <p class="text-base text-red-300 mb-2">📉 Jami chiqim</p>
+            <h2 class="text-4xl font-bold text-red-400">-{{ total_out|floatformat:2|intcomma }}</h2>
+            <p class="text-gray-400 mt-1">so'm</p>
+        </div>
+    </div>
+
+    <!-- CHIQIMLAR BO'YICHA STATISTIKA -->
+    <div class="bg-slate-800/70 backdrop-blur-lg border-2 border-amber-500/20 rounded-2xl p-8 shadow-xl">
+        <h2 class="text-2xl font-bold text-amber-400 mb-6 flex items-center gap-2">
+            <span>💸</span> Eng ko'p xarajat qilingan kategoriyalar
+        </h2>
+
+        {% if expenses_by_title %}
+            <div class="space-y-4">
+                {% for item in expenses_by_title %}
+                    <div class="bg-slate-700/50 rounded-xl p-4 border-2 border-red-500/20 hover:border-red-500/40 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-lg font-semibold text-white">{{ item.title|default:"Noma'lum" }}</span>
+                            <span class="text-xl font-bold text-red-400">{{ item.total|floatformat:2|intcomma }} so'm</span>
+                        </div>
+
+                        <!-- Progress bar -->
+                        <div class="w-full bg-slate-600/50 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-red-500 to-red-600 h-3 rounded-full"
+                                 style="width: {% widthratio item.total total_out 100 %}%"></div>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-1">
+                            {% widthratio item.total total_out 100 %}% umumiy chiqimdan
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-400 text-center py-8">Hozircha chiqimlar yo'q</p>
+        {% endif %}
+    </div>
+
+    <!-- KIRIMLAR BO'YICHA STATISTIKA -->
+    <div class="bg-slate-800/70 backdrop-blur-lg border-2 border-amber-500/20 rounded-2xl p-8 shadow-xl">
+        <h2 class="text-2xl font-bold text-amber-400 mb-6 flex items-center gap-2">
+            <span>💵</span> Eng ko'p kirim manbaalari
+        </h2>
+
+        {% if income_by_title %}
+            <div class="space-y-4">
+                {% for item in income_by_title %}
+                    <div class="bg-slate-700/50 rounded-xl p-4 border-2 border-green-500/20 hover:border-green-500/40 transition">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-lg font-semibold text-white">{{ item.title|default:"Noma'lum" }}</span>
+                            <span class="text-xl font-bold text-green-400">+{{ item.total|floatformat:2|intcomma }} so'm</span>
+                        </div>
+                        <!-- Progress bar -->
+                        <div class="w-full bg-slate-600/50 rounded-full h-3">
+                            <div class="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full"
+                                 style="width: {% widthratio item.total total_in 100 %}%"></div>
+                        </div>
+                        <p class="text-sm text-gray-400 mt-1">
+                            {% widthratio item.total total_in 100 %}% umumiy kirimdan
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-400 text-center py-8">Hozircha kirimlar yo'q</p>
+        {% endif %}
+    </div>
+
+    <!-- OXIRGI 30 KUN STATISTIKASI -->
+    <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-slate-800/70 backdrop-blur-lg border-2 border-green-500/30 rounded-2xl p-8 shadow-xl">
+            <h3 class="text-xl font-bold text-green-400 mb-4">📅 Oxirgi 30 kun - Kirim</h3>
+            <p class="text-4xl font-bold text-white">+{{ recent_income|floatformat:2|intcomma }}</p>
+            <p class="text-gray-400 mt-2">so'm</p>
+        </div>
+
+        <div class="bg-slate-800/70 backdrop-blur-lg border-2 border-red-500/30 rounded-2xl p-8 shadow-xl">
+            <h3 class="text-xl font-bold text-red-400 mb-4">📅 Oxirgi 30 kun - Chiqim</h3>
+            <p class="text-4xl font-bold text-white">-{{ recent_expenses|floatformat:2|intcomma }}</p>
+            <p class="text-gray-400 mt-2">so'm</p>
+        </div>
+    </div>
+
+    {% if top_expense_day %}
+    <div class="bg-slate-800/70 backdrop-blur-lg border-2 border-amber-500/20 rounded-2xl p-8 shadow-xl">
+        <h2 class="text-2xl font-bold text-amber-400 mb-4 flex items-center gap-2">
+            <span>🔥</span> Eng ko'p xarajat qilingan kun
+        </h2>
+        <div class="flex items-center justify-between">
+            <p class="text-xl text-white">{{ top_expense_day.date|date:"d M, Y (l)" }}</p>
+            <p class="text-3xl font-bold text-red-400">{{ top_expense_day.total|floatformat:2|intcomma }} so'm</p>
+        </div>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

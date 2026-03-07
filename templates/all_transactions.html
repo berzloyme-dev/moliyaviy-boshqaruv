@@ -9,29 +9,31 @@
     <!-- CHAP TOMON - Amallar ro'yxati -->
     <div class="flex-1">
         
-        <h1 class="text-4xl font-bold mb-6 text-white">Barcha amallar</h1>
+        <h1 class="text-4xl font-bold mb-6 text-amber-400 flex items-center gap-3">
+            <span>📋</span> Barcha amallar
+        </h1>
 
         <!-- FILTER -->
         <div class="mb-6 flex gap-4">
             <a href="?{% if selected_date %}date={{ selected_date|date:'Y-m-d' }}&{% endif %}type=all" 
-               class="px-6 py-3 text-lg rounded-xl {% if filter_type == 'all' or not filter_type %}bg-blue-500{% else %}bg-white/20{% endif %} text-white hover:bg-blue-600 transition font-medium">
+               class="px-6 py-3 text-lg rounded-xl {% if filter_type == 'all' or not filter_type %}bg-amber-600 border-2 border-amber-500{% else %}bg-slate-700/50 border-2 border-slate-600{% endif %} text-white hover:bg-amber-700 transition font-medium shadow-lg">
                Hammasi
             </a>
 
             <a href="?{% if selected_date %}date={{ selected_date|date:'Y-m-d' }}&{% endif %}type=in"
-               class="px-6 py-3 text-lg rounded-xl {% if filter_type == 'in' %}bg-green-500{% else %}bg-white/20{% endif %} text-white hover:bg-green-600 transition font-medium">
+               class="px-6 py-3 text-lg rounded-xl {% if filter_type == 'in' %}bg-green-600 border-2 border-green-500{% else %}bg-slate-700/50 border-2 border-slate-600{% endif %} text-white hover:bg-green-700 transition font-medium shadow-lg">
                Kirimlar
             </a>
 
             <a href="?{% if selected_date %}date={{ selected_date|date:'Y-m-d' }}&{% endif %}type=out"
-               class="px-6 py-3 text-lg rounded-xl {% if filter_type == 'out' %}bg-red-500{% else %}bg-white/20{% endif %} text-white hover:bg-red-600 transition font-medium">
+               class="px-6 py-3 text-lg rounded-xl {% if filter_type == 'out' %}bg-red-600 border-2 border-red-500{% else %}bg-slate-700/50 border-2 border-slate-600{% endif %} text-white hover:bg-red-700 transition font-medium shadow-lg">
                Chiqimlar
             </a>
         </div>
 
         <!-- Tanlangan sana -->
         {% if selected_date %}
-            <div class="mb-4 bg-blue-500/20 border border-blue-500/30 rounded-xl p-4">
+            <div class="mb-4 bg-amber-500/20 border-2 border-amber-500/40 rounded-xl p-4">
                 <p class="text-white text-lg">
                     📅 {{ selected_date|date:"d M, Y (l)" }}
                 </p>
@@ -39,25 +41,25 @@
         {% endif %}
 
         <!-- JADVAL -->
-        <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl shadow overflow-hidden">
+        <div class="bg-slate-800/70 backdrop-blur-lg border-2 border-amber-500/20 rounded-2xl shadow-xl overflow-hidden">
 
             <table class="w-full text-white">
-                <thead class="bg-white/5 border-b border-white/10">
+                <thead class="bg-slate-900/80 border-b-2 border-amber-500/30">
                     <tr>
-                        <th class="p-5 text-left text-lg font-semibold">Vaqt</th>
-                        <th class="p-5 text-left text-lg font-semibold">Sarlavha</th>
-                        <th class="p-5 text-left text-lg font-semibold">Izoh</th>
-                        <th class="p-5 text-left text-lg font-semibold">Turi</th>
-                        <th class="p-5 text-left text-lg font-semibold">Summa</th>
-                        <th class="p-5 text-center text-lg font-semibold">Amal</th>
+                        <th class="p-5 text-left text-lg font-semibold text-amber-400">Vaqt</th>
+                        <th class="p-5 text-left text-lg font-semibold text-amber-400">Sarlavha</th>
+                        <th class="p-5 text-left text-lg font-semibold text-amber-400">Izoh</th>
+                        <th class="p-5 text-left text-lg font-semibold text-amber-400">Turi</th>
+                        <th class="p-5 text-left text-lg font-semibold text-amber-400">Summa</th>
+                        <th class="p-5 text-center text-lg font-semibold text-amber-400">Amal</th>
                     </tr>
                 </thead>
 
                 <tbody>
                 {% for t in transactions %}
-                    <tr class="border-t border-white/10 hover:bg-white/5 transition">
+                    <tr class="border-t border-amber-500/10 hover:bg-slate-700/50 transition">
 
-                        <td class="p-5 text-base">
+                        <td class="p-5 text-base text-gray-300">
                             {% if t.time %}
                                 {{ t.time|time:"H:i" }}
                             {% else %}
@@ -65,7 +67,7 @@
                             {% endif %}
                         </td>
 
-                        <td class="p-5 font-medium text-base">
+                        <td class="p-5 font-medium text-base text-white">
                             {{ t.title|default:t.category }}
                         </td>
 
@@ -75,24 +77,24 @@
 
                         <td class="p-5">
                             {% if t.type == "IN" %}
-                                <span class="px-4 py-2 bg-green-500/20 text-green-300 border border-green-500/30 rounded-full text-base font-medium">
-                                    Kirim
+                                <span class="px-4 py-2 bg-green-600 text-white border-2 border-green-500 rounded-full text-base font-medium shadow-lg">
+                                    📈 Kirim
                                 </span>
                             {% else %}
-                                <span class="px-4 py-2 bg-red-500/20 text-red-300 border border-red-500/30 rounded-full text-base font-medium">
-                                    Chiqim
+                                <span class="px-4 py-2 bg-red-600 text-white border-2 border-red-500 rounded-full text-base font-medium shadow-lg">
+                                    📉 Chiqim
                                 </span>
                             {% endif %}
                         </td>
 
-                        <td class="p-5 font-semibold text-lg">
+                        <td class="p-5 font-semibold text-lg text-amber-300">
                             {{ t.amount|intcomma }} so'm
                         </td>
 
                         <td class="p-5 text-center">
                             <a href="{% url 'delete_transaction' t.pk %}"
                                onclick="return confirm('Haqiqatan ham o\'chirmoqchimisiz?')"
-                               class="inline-flex items-center gap-2 px-4 py-3 bg-red-500/80 text-white rounded-xl hover:bg-red-600 transition text-base font-medium">
+                               class="inline-flex items-center gap-2 px-4 py-3 bg-red-600 text-white rounded-xl hover:bg-red-700 transition text-base font-medium border-2 border-red-500 shadow-lg">
                                 🗑 O'chirish
                             </a>
                         </td>
@@ -115,11 +117,11 @@
         </div>
 
         <!-- Jami -->
-        <div class="mt-6 text-right text-2xl font-bold text-white bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6">
+        <div class="mt-6 text-right text-2xl font-bold text-white bg-slate-800/70 backdrop-blur-lg border-2 border-amber-500/30 rounded-2xl p-6 shadow-xl">
             {% if is_negative %}
-                <span class="text-red-400">Jami: -{{ total|intcomma }} so'm</span>
+                <span class="text-red-400">Jami: -{{ total|floatformat:2|intcomma }} so'm</span>
             {% else %}
-                <span class="text-green-400">Jami: {{ total|intcomma }} so'm</span>
+                <span class="text-amber-400">Jami: {{ total|floatformat:2|intcomma }} so'm</span>
             {% endif %}
         </div>
 
@@ -127,19 +129,19 @@
 
     <!-- O'NG TOMON - Kalendar -->
     <div class="w-96">
-        <div class="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 sticky top-6">
+        <div class="bg-slate-800/70 backdrop-blur-lg border-2 border-amber-500/30 rounded-2xl p-6 sticky top-6 shadow-xl">
             
-            <h3 class="text-2xl font-bold text-white mb-6">{{ current_month }}</h3>
+            <h3 class="text-2xl font-bold text-amber-400 mb-6">{{ current_month }}</h3>
             
             <div class="grid grid-cols-7 gap-2">
                 <!-- Hafta kunlari -->
-                <div class="text-center text-gray-400 text-xs font-semibold py-2">Ya</div>
-                <div class="text-center text-gray-400 text-xs font-semibold py-2">Du</div>
-                <div class="text-center text-gray-400 text-xs font-semibold py-2">Se</div>
-                <div class="text-center text-gray-400 text-xs font-semibold py-2">Ch</div>
-                <div class="text-center text-gray-400 text-xs font-semibold py-2">Pa</div>
-                <div class="text-center text-gray-400 text-xs font-semibold py-2">Ju</div>
-                <div class="text-center text-gray-400 text-xs font-semibold py-2">Sh</div>
+                <div class="text-center text-amber-400 text-xs font-semibold py-2">Ya</div>
+                <div class="text-center text-amber-400 text-xs font-semibold py-2">Du</div>
+                <div class="text-center text-amber-400 text-xs font-semibold py-2">Se</div>
+                <div class="text-center text-amber-400 text-xs font-semibold py-2">Ch</div>
+                <div class="text-center text-amber-400 text-xs font-semibold py-2">Pa</div>
+                <div class="text-center text-amber-400 text-xs font-semibold py-2">Ju</div>
+                <div class="text-center text-amber-400 text-xs font-semibold py-2">Sh</div>
                 
                 <!-- Bo'sh kunlar -->
                 {% for i in empty_days %}
@@ -149,15 +151,15 @@
                 <!-- Kunlar -->
                 {% for day in calendar_days %}
                     <a href="?date={{ day.date|date:'Y-m-d' }}{% if filter_type %}&type={{ filter_type }}{% endif %}"
-                       class="relative p-2 rounded-lg text-center cursor-pointer transition text-sm
+                       class="relative p-2 rounded-lg text-center cursor-pointer transition text-sm border-2
                               {% if day.is_selected %}
-                                  bg-blue-500 text-white ring-2 ring-blue-400
+                                  bg-amber-600 text-white border-amber-500 ring-2 ring-amber-400 shadow-lg
                               {% elif day.is_today %}
-                                  bg-blue-500/30 text-white
+                                  bg-amber-600/40 text-white border-amber-500/50
                               {% elif day.has_data %}
-                                  bg-white/10 hover:bg-white/15 text-white
+                                  bg-slate-700 hover:bg-slate-600 text-white border-amber-500/20
                               {% else %}
-                                  bg-white/5 hover:bg-white/10 text-gray-500
+                                  bg-slate-800/50 hover:bg-slate-700/50 text-gray-500 border-slate-700/30
                               {% endif %}">
                         
                         <div class="font-semibold">{{ day.day }}</div>
@@ -165,9 +167,9 @@
                         {% if day.has_data %}
                             <div class="text-xs mt-1">
                                 {% if day.balance > 0 %}
-                                    <span class="text-green-400">●</span>
+                                    <span class="text-green-400 text-lg">●</span>
                                 {% elif day.balance < 0 %}
-                                    <span class="text-red-400">●</span>
+                                    <span class="text-red-400 text-lg">●</span>
                                 {% else %}
                                     <span class="text-gray-400">●</span>
                                 {% endif %}
@@ -179,7 +181,7 @@
 
             <!-- Bugungi kunga qaytish -->
             <a href="?{% if filter_type %}type={{ filter_type }}{% endif %}"
-               class="mt-6 block text-center py-3 rounded-xl bg-white/10 hover:bg-white/20 transition text-sm font-medium">
+               class="mt-6 block text-center py-3 rounded-xl bg-amber-600 hover:bg-amber-700 transition text-sm font-medium border-2 border-amber-500 shadow-lg text-white">
                 📅 Bugungi kun
             </a>
 
